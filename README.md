@@ -1,12 +1,13 @@
-# 家 ie — Zuhause
+# 家 ie — Home
 
 An app for the [Mudita Kompakt](https://mudita.com/products/kompakt/) that switches lights and
 other devices in a Home Assistant instance, and controls its media players. It is built with
 Mudita's [MMD](https://github.com/mudita/MMD) design system and installs on any device with
 Android 11 or later.
 
-*Ie* is 家 — a house, and the plain word for home. The app is called **Zuhause** in German and
-Japanese, and **Home** in English. Its application id is `de.asdfghasdfgh.ie`.
+*Ie* is 家 — a house, and the plain word for home. The app is called **Home** in English and
+**Zuhause** only in German; elsewhere, Japanese included, it keeps the English name. Its
+application id is `de.asdfghasdfgh.ie`.
 
 ## What it does
 
@@ -25,7 +26,7 @@ Japanese, and **Home** in English. Its application id is `de.asdfghasdfgh.ie`.
 - **Current states** while the app is on screen: every five seconds the entities are read again,
   so a change made elsewhere appears without a press.
 - **English and German** for everything but the launcher name; the name is *Home* in English and
-  *Zuhause* in German and Japanese.
+  *Zuhause* in German.
 
 It shows no dashboards, automations or sensors, and has no tabs. The one list is what the Kompakt
 can read at a glance and switch with a thumb.
