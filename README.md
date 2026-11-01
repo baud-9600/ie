@@ -1,112 +1,121 @@
 # 家 ie — Zuhause
 
-Eine kleine Android-App für das [Mudita Kompakt](https://mudita.com/products/kompakt/), mit der
-sich Geräte in einer Home-Assistant-Instanz schalten und Medienplayer steuern lassen. Gebaut mit
-Muditas [MMD](https://github.com/mudita/MMD)-Designsystem für E Ink.
+An app for the [Mudita Kompakt](https://mudita.com/products/kompakt/) that switches lights and
+other devices in a Home Assistant instance, and controls its media players. It is built with
+Mudita's [MMD](https://github.com/mudita/MMD) design system and installs on any device with
+Android 11 or later.
 
-Die App heißt auf Deutsch und Japanisch **Zuhause**, auf Englisch **Home**. Der Projektname ist
-*ie* (家), das japanische Wort für Haus und Zuhause; die Application ID ist
-`de.asdfghasdfgh.ie`.
+*Ie* is 家 — a house, and the plain word for home. The app is called **Zuhause** in German and
+Japanese, and **Home** in English. Its application id is `de.asdfghasdfgh.ie`.
 
-## Was sie kann
+## What it does
 
-- **Schalter, Lichter, Lüfter und Helfer** aus Home Assistant anzeigen und mit einem Tipp auf die
-  ganze Zeile an- oder ausschalten.
-- **Medienplayer** steuern: leiser, lauter, Play, Pause und Stopp.
-- **Auswählen, was erscheint**: Unter Einstellungen → Geräte auswählen lässt sich für jedes
-  Gerät und jeden Medienplayer einzeln entscheiden, ob es auf der Hauptseite steht. Bis zur
-  ersten Auswahl wird alles angezeigt; die Auswahl bleibt auf dem Telefon gespeichert.
-- **Jede Home-Assistant-Adresse**: lokal (`http://homeassistant.local:8123`), per IP, hinter einem
-  Reverse-Proxy mit Pfad oder von außen über HTTPS. Die Adresse wird beim Einrichten frei
-  eingetragen.
-- **Optionale Server-Adresse**: Löst der Name vom Telefon aus auf einen anderen Server auf als im
-  lokalen Netz, kann dort die lokale IP eingetragen werden, zum Beispiel `192.168.1.10`. Die
-  Verbindung geht dann dorthin, das TLS-Zertifikat wird aber weiterhin auf den Namen oben geprüft.
-- **Aktuelle Zustände**, solange die App auf dem Bildschirm ist: alle fünf Sekunden fragt sie die
-  Zustände neu ab. Änderungen, die anderswo ausgelöst werden, erscheinen so von selbst.
-- **Englisch und Deutsch**, je nach Sprache des Telefons.
+- **Switches, lights, fans and helpers**, on or off with one press on the row. The switch at the
+  end says which way it stands, and the state is read back from Home Assistant after the press.
+- **Media players**: quieter, louder, play, pause and stop. What the player is doing, its volume
+  and whether it is muted are shown above the buttons.
+- **Only the devices you choose.** Settings → Select devices lists everything Home Assistant
+  offers in the four supported kinds; untick what should stay off the main screen. Until a choice
+  is saved, everything is shown. The choice stays on the phone.
+- **Any Home Assistant address**: on the local network, through a reverse proxy with a path, or
+  from outside over HTTPS. The address is typed in on the phone and checked before it is kept.
+- **An optional server address** for a name that resolves differently inside and outside the
+  house: the app connects to the address given there, while the certificate is still checked
+  against the name above.
+- **Current states** while the app is on screen: every five seconds the entities are read again,
+  so a change made elsewhere appears without a press.
+- **English and German** for everything but the launcher name; the name is *Home* in English and
+  *Zuhause* in German and Japanese.
 
-Die App zeigt bewusst nur Geräte und keine Dashboards, Automationen oder Sensoren. Das hält die
-Liste auf dem E-Ink-Bildschirm kurz und die Bedienung eindeutig.
+It shows no dashboards, automations or sensors, and has no tabs. The one list is what the Kompakt
+can read at a glance and switch with a thumb.
 
-## Einrichten
+## The devices it shows
 
-1. In Home Assistant ein langlebiges Zugangstoken erstellen:
-   **Profil → Sicherheit → Langlebige Zugangstokens → Token erstellen**.
-2. Die App öffnen, die Adresse der Instanz eintragen, zum Beispiel
-   `http://homeassistant.local:8123` oder `https://meine-instanz.ui.nabu.casa`, und den Token
-   einfügen. Bei Bedarf unter **Server-Adresse** die lokale IP eintragen, falls der Name vom
-   Telefon aus woandershin zeigt.
-3. **Verbinden** drücken. Die App prüft die Verbindung, bevor sie Adresse und Token behält.
-
-Ein eigenes Home-Assistant-Benutzerkonto für die App ist sinnvoll: Der Token hat genau die Rechte
-dieses Kontos. Für diese App genügen Rechte auf die Geräte, die geschaltet werden sollen.
-
-## Unterstützte Geräte
-
-| Home-Assistant-Domain | Anzeige | Bedienung |
+| Home Assistant domain | What it is | What it does here |
 |---|---|---|
-| `light` | Licht | An/Aus |
-| `switch` | Schalter | An/Aus |
-| `input_boolean` | Helfer | An/Aus |
-| `fan` | Lüfter | An/Aus |
-| `media_player` | Medienplayer | Leiser, Lauter, Play, Pause, Stopp |
+| `light` | a light | on or off |
+| `switch` | a switch | on or off |
+| `input_boolean` | a helper | on or off |
+| `fan` | a fan | on or off |
+| `media_player` | a media player | quieter, louder, play, pause, stop |
 
-Andere Domains werden nicht angezeigt.
+An entity disabled in Home Assistant is not published by its API, so it cannot appear here. One
+that is merely unavailable is listed and greyed until it comes back.
 
-## Netzwerk und Datenschutz
+## Connecting
 
-Die App spricht ausschließlich mit der eingetragenen Home-Assistant-Adresse, über die offizielle
-REST-API. Es gibt keine Konten, keine Analyse und keine Werbung.
+1. In Home Assistant, open **Profile → Security → Long-lived access tokens** and create a token.
+2. Open the app and enter the address, for example `http://homeassistant.local:8123` or
+   `https://my-instance.ui.nabu.casa`.
+3. Paste the token. If the name reaches a different server from the phone, enter the address that
+   does reach Home Assistant under **Server address**; the name above is still the one whose
+   certificate is checked.
+4. Press **Connect**. The app asks Home Assistant who it is before it keeps anything.
 
-Der Token liegt **verschlüsselt** im privaten Speicher der App: Ein AES-GCM-Schlüssel wird im
-Android Keystore erzeugt und verlässt ihn nie; in den Preferences steht nur der Geheimtext mit
-seinem zufälligen IV. Ein Backup der Preferences ist damit kein Backup des Tokens. Wer den Token
-selbst braucht, kann ihn in Home Assistant neu erzeugen.
+A Home Assistant user of its own is worth making for this app: the token has exactly that user's
+rights. It needs access only to the entities that should be switched or played here.
 
-Die App fordert **nur die Internet-Berechtigung** an. Es gibt keinen Standort, keine Kamera,
-kein Mikrofon, keine Kontakte und keinen Zugriff auf Dateien. `android:allowBackup="false"`
-verhindert außerdem, dass die Preferences in ein Systembackup wandern.
+## Privacy
 
-Für eine lokale Instanz ohne TLS ist `android:usesCleartextTraffic="true"` gesetzt. Wer nur HTTPS
-verwendet, kann das in `AndroidManifest.xml` entfernen. Selbstsignierte HTTPS-Zertifikate werden
-nicht akzeptiert.
+The app talks to the Home Assistant address that was entered, and to nothing else. There are no
+accounts of the app's own, no analytics and no adverts.
 
-## Bauen
+The access token is kept **encrypted**: an AES-GCM key is generated in the Android Keystore and
+never leaves it, and the preferences hold only the ciphertext and its random IV. A copy of the
+preferences is not a copy of the token. The token can be revoked and replaced in Home Assistant
+at any time.
 
-Vorausgesetzt werden JDK 17 oder neuer und das Android SDK mit API 36. MMD 1.0.2 liegt als lokale
-Veröffentlichung in `~/.m2` (aus dem MMD-Checkout); der Build holt es über `mavenLocal()`.
+The app asks for **Internet only**. There is no location, camera, microphone, contacts or file
+access. `android:allowBackup="false"` keeps the preferences out of a system backup.
+
+For a Home Assistant reached over plain `http`, the manifest allows cleartext traffic. An
+instance reached only over HTTPS can do without it; remove `android:usesCleartextTraffic="true"`
+from `app/src/main/AndroidManifest.xml`. Self-signed HTTPS certificates are not accepted.
+
+## Building
 
 ```
 ./gradlew assembleDebug
 ```
 
-Die APK liegt danach unter `app/build/outputs/apk/debug/app-debug.apk`.
+The APK is at `app/build/outputs/apk/debug/app-debug.apk`.
+
+A release build needs a keystore at `signing/signing.keystore` with a matching
+`signing/signing.properties`. There is no fallback key in this repository: without one, a release
+build comes out unsigned rather than wrongly signed.
 
 ```
 ./gradlew testDebugUnitTest
 ```
 
-prüft Adressen, das Einlesen der Zustände, die optionale Server-Adresse und die Auswahl der
-unterstützten Geräte.
+runs the tests: addresses with and without a scheme, a server address that overrides DNS while
+the URL host stays the same, the entities read from `/api/states`, and the media-player volume.
 
-Installieren auf einem angeschlossenen Telefon:
+## Getting it
+
+There is no published APK yet. Build it as above and sideload it:
 
 ```
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
 
-## Technik
+Releases, when there are any, will be at <https://github.com/baud-9600/ie/releases>.
 
-- Kotlin, Jetpack Compose und Muditas MMD-Komponenten (`ThemeMMD`, `TopAppBarMMD`, `TextMMD`,
-  `SwitchMMD`, `TextFieldMMD`, `HouseButton`).
-- Home Assistant über HTTP/REST (`/api/`, `/api/states`, `/api/services/...`) mit OkHttp.
-- Ein `ViewModel` hält die Geräteliste; abgefragt wird nur, solange die App im Vordergrund ist.
-- Der Home-Assistant-Token wird mit AES-GCM und einem Schlüssel aus dem Android Keystore
-  verschlüsselt; ausgewählte Entitäten liegen als Menge von Entity-IDs in den Preferences.
-- Kein WebSocket: Für eine kurze Geräteliste und fünf Sekunden Aktualisierungsabstand ist REST
-  einfacher und auf E Ink ruhiger.
+## Licence
 
-## Lizenz
+GPL-3.0-only. See [LICENSE](LICENSE).
 
-GPL-3.0-only. Siehe [LICENSE](LICENSE).
+Copyright (C) 2026 Manuel Kuklinski
+
+This program is free software: you can redistribute it and/or modify it under the terms of the
+GNU General Public License as published by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program. If
+not, see <https://www.gnu.org/licenses/>.
+
+Mudita's MMD is Apache 2.0; see its [repository](https://github.com/mudita/MMD).
