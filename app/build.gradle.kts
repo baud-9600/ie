@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -17,9 +19,28 @@ android {
         versionName = "0.1.0"
     }
 
+    // A keystore in signing/ signs every build type when it is present, so a later update can
+    // never hit INSTALL_FAILED_UPDATE_INCOMPATIBLE. It is gitignored and there is no fallback:
+    // a fresh clone builds an unsigned release APK, which will not install anywhere.
+    val signingPropertiesFile = rootProject.file("signing/signing.properties")
+    val realSigningConfig = if (signingPropertiesFile.isFile) {
+        val signingProperties = Properties().apply {
+            signingPropertiesFile.inputStream().use(::load)
+        }
+        signingConfigs.create("real") {
+            storeFile = rootProject.file("signing/signing.keystore")
+            storePassword = signingProperties.getProperty("STORE_PASSWORD")
+            keyAlias = signingProperties.getProperty("KEY_ALIAS")
+            keyPassword = signingProperties.getProperty("KEY_PASSWORD")
+        }
+    } else {
+        null
+    }
+
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
+            realSigningConfig?.let { signingConfig = it }
         }
         getByName("release") {
             isMinifyEnabled = true
@@ -28,6 +49,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            realSigningConfig?.let { signingConfig = it }
+
+            // A build in two places must have the same contents: no git revision stamped
+            // into META-INF by a working copy that has no .git.
+            vcsInfo {
+                include = false
+            }
         }
     }
 

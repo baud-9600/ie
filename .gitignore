@@ -7,3 +7,5 @@ local.properties
 .kotlin/
 
 .DS_Store
+signing/signing.properties
+signing/signing.keystore
