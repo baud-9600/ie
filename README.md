@@ -53,6 +53,10 @@ that is merely unavailable is listed and greyed until it comes back.
    certificate is checked.
 4. Press **Connect**. The app asks Home Assistant who it is before it keeps anything.
 
+Once connected, the address, server address and token move behind **Settings → Instance**, so the
+main settings screen holds only the instance, the devices and the way out. Changing them is the
+same form, reached one step further in.
+
 A Home Assistant user of its own is worth making for this app: the token has exactly that user's
 rights. It needs access only to the entities that should be switched or played here.
 

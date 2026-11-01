@@ -52,7 +52,9 @@ import java.util.Locale
 @Composable
 fun ZuhauseApp(viewModel: HomeViewModel = viewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var settings by rememberSaveable { mutableStateOf(state.connection == null) }
+    val connection = state.connection
+    var settings by rememberSaveable { mutableStateOf(false) }
+    var editingConnection by rememberSaveable { mutableStateOf(connection == null) }
     var selecting by rememberSaveable { mutableStateOf(false) }
 
     // Home Assistant is asked again while the screen is on; only a change in the answers
@@ -70,9 +72,10 @@ fun ZuhauseApp(viewModel: HomeViewModel = viewModel()) {
         }
     }
 
-    BackHandler(enabled = settings || selecting) {
+    BackHandler(enabled = settings || selecting || editingConnection) {
         when {
             selecting -> selecting = false
+            editingConnection -> editingConnection = false
             else -> settings = false
         }
     }
@@ -88,16 +91,26 @@ fun ZuhauseApp(viewModel: HomeViewModel = viewModel()) {
             },
             onRefresh = { viewModel.refresh() },
         )
-        settings -> SettingsScreen(
-            connection = state.connection,
-            onBack = { settings = false },
+        editingConnection -> ConnectionScreen(
+            connection = connection,
+            onBack = { editingConnection = false },
+            onConnected = { editingConnection = false },
             onConnect = { address, token, serverAddress ->
                 viewModel.connect(address, token, serverAddress)
             },
+        )
+        settings && connection != null -> SettingsScreen(
+            connection = connection,
+            onBack = { settings = false },
+            onEditConnection = { editingConnection = true },
             onSelectDevices = { selecting = true },
             selectedCount = state.visibleDevices.size,
             totalCount = state.devices.size,
-            onDisconnect = { viewModel.disconnect() },
+            onDisconnect = {
+                viewModel.disconnect()
+                settings = false
+                editingConnection = true
+            },
         )
         else -> HomeScreen(
             state = state,

@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Zuhause</string>
     <string name="settings_title">Einstellungen</string>
+    <string name="instance_title">Instanz</string>
     <string name="back">Zurück</string>
     <string name="retry">Erneut versuchen</string>
     <string name="loading">Verbinde mit Home Assistant …</string>

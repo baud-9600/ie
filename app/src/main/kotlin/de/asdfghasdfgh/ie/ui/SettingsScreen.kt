@@ -31,34 +31,107 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
+ * While the app is connected, this is only a menu: the instance and its token stay one step
+ * behind **Instance**, and the list of devices one behind **Select devices**.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(
+    connection: Connection,
+    onBack: () -> Unit,
+    onEditConnection: () -> Unit,
+    onSelectDevices: () -> Unit,
+    selectedCount: Int,
+    totalCount: Int,
+    onDisconnect: () -> Unit,
+) {
+    var armed by remember { mutableStateOf(false) }
+    LaunchedEffect(armed) {
+        if (!armed) return@LaunchedEffect
+        delay(6_000)
+        armed = false
+    }
+
+    val where = if (connection.serverAddress.isBlank()) {
+        connection.baseUrl
+    } else {
+        "${connection.baseUrl} · ${connection.serverAddress}"
+    }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.surface,
+        topBar = {
+            TopAppBarMMD(
+                title = { TextMMD(text = stringResource(R.string.settings_title)) },
+                navigationIcon = { BarText(stringResource(R.string.back), onBack) },
+            )
+        },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp),
+        ) {
+            Heading(stringResource(R.string.setup_heading))
+            HouseButton(
+                label = stringResource(R.string.instance_title),
+                note = where,
+                onClick = onEditConnection,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Heading(stringResource(R.string.devices_heading))
+            HouseButton(
+                label = stringResource(R.string.select_devices_title),
+                note = if (totalCount > 0) {
+                    stringResource(R.string.selected_count, selectedCount, totalCount)
+                } else {
+                    null
+                },
+                onClick = onSelectDevices,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Spacer(Modifier.height(28.dp))
+            HouseButton(
+                label = stringResource(if (armed) R.string.disconnect_armed else R.string.disconnect),
+                onClick = {
+                    if (armed) {
+                        armed = false
+                        onDisconnect()
+                    } else {
+                        armed = true
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                on = armed,
+            )
+            Spacer(Modifier.height(28.dp))
+        }
+    }
+}
+
+/**
  * The one form: where Home Assistant lives and the token that lets this phone in. The
  * connection is checked before it is kept, so a wrong token is said here rather than on the
  * list afterwards.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(
+fun ConnectionScreen(
     connection: Connection?,
     onBack: () -> Unit,
+    onConnected: () -> Unit,
     onConnect: suspend (address: String, token: String, serverAddress: String) -> Failure?,
-    onSelectDevices: () -> Unit,
-    selectedCount: Int,
-    totalCount: Int,
-    onDisconnect: () -> Unit,
 ) {
     var address by remember(connection) { mutableStateOf(connection?.baseUrl.orEmpty()) }
     var token by remember(connection) { mutableStateOf(connection?.token.orEmpty()) }
     var serverAddress by remember(connection) { mutableStateOf(connection?.serverAddress.orEmpty()) }
     var saving by remember { mutableStateOf(false) }
     var failure by remember { mutableStateOf<Failure?>(null) }
-    var armed by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-
-    LaunchedEffect(armed) {
-        if (!armed) return@LaunchedEffect
-        delay(6_000)
-        armed = false
-    }
 
     fun connect() {
         if (saving) return
@@ -67,7 +140,7 @@ fun SettingsScreen(
         scope.launch {
             val result = onConnect(address, token, serverAddress)
             saving = false
-            if (result == null) onBack() else failure = result
+            if (result == null) onConnected() else failure = result
         }
     }
 
@@ -75,7 +148,7 @@ fun SettingsScreen(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             TopAppBarMMD(
-                title = { TextMMD(text = stringResource(R.string.settings_title)) },
+                title = { TextMMD(text = stringResource(R.string.instance_title)) },
                 navigationIcon = { BarText(stringResource(R.string.back), onBack) },
             )
         },
@@ -141,33 +214,6 @@ fun SettingsScreen(
                 on = true,
                 enabled = !saving,
             )
-
-            if (connection != null) {
-                HouseButton(
-                    label = stringResource(R.string.select_devices_title),
-                    note = if (totalCount > 0) {
-                        stringResource(R.string.selected_count, selectedCount, totalCount)
-                    } else {
-                        null
-                    },
-                    onClick = onSelectDevices,
-                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                )
-
-                HouseButton(
-                    label = stringResource(if (armed) R.string.disconnect_armed else R.string.disconnect),
-                    onClick = {
-                        if (armed) {
-                            armed = false
-                            onDisconnect()
-                        } else {
-                            armed = true
-                        }
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                    on = armed,
-                )
-            }
 
             Spacer(Modifier.height(28.dp))
         }

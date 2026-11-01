@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Home</string>
     <string name="settings_title">Settings</string>
+    <string name="instance_title">Instance</string>
     <string name="back">Back</string>
     <string name="retry">Try again</string>
     <string name="loading">Connecting to Home Assistant…</string>
