@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Home</string>
+    <string name="settings_title">Settings</string>
+    <string name="back">Back</string>
+    <string name="retry">Try again</string>
+    <string name="loading">Connecting to Home Assistant…</string>
+    <string name="devices_heading">Devices</string>
+    <string name="media_heading">Media</string>
+    <string name="empty">No switches, lights or media players were found.</string>
+    <string name="last_updated">Last updated at %1$s</string>
+
+    <string name="not_connected_title">Not connected</string>
+    <string name="not_connected_body">Connect this app to your Home Assistant to switch lights and devices and to control media players.</string>
+    <string name="connect">Connect</string>
+
+    <string name="setup_heading">Home Assistant</string>
+    <string name="setup_help">Enter the address of your Home Assistant. Any http:// or https:// address works, on the local network or elsewhere.</string>
+    <string name="address_label">Address</string>
+    <string name="address_hint">http://homeassistant.local:8123</string>
+    <string name="server_address_label">Server address (optional)</string>
+    <string name="server_address_hint">192.168.1.10</string>
+    <string name="server_address_help">If the address above reaches a different server from this phone, enter the IP address or host name that reaches Home Assistant here. The name above is still used for the certificate.</string>
+    <string name="token_label">Access token</string>
+    <string name="token_hint">Long-lived access token</string>
+    <string name="token_help">In Home Assistant, open your profile, then Security, and create a token under Long-lived access tokens. It stays on this phone.</string>
+    <string name="connecting">Connecting…</string>
+    <string name="disconnect">Remove connection</string>
+    <string name="disconnect_armed">Really remove?</string>
+
+    <string name="select_devices_title">Select devices</string>
+    <string name="selection_help">The chosen devices appear on the main screen. Until you save a choice, everything Home Assistant offers is shown.</string>
+    <string name="select_all">All</string>
+    <string name="select_none">None</string>
+    <string name="save">Save</string>
+    <string name="selected_count">%1$d of %2$d selected</string>
+    <string name="loading_devices">Loading devices…</string>
+    <string name="no_devices_selected">No devices selected. Choose them in Settings.</string>
+
+    <string name="state_on">On</string>
+    <string name="state_off">Off</string>
+    <string name="state_unavailable">Unavailable</string>
+
+    <string name="media_playing">Playing</string>
+    <string name="media_paused">Paused</string>
+    <string name="media_idle">Ready</string>
+    <string name="media_off">Off</string>
+    <string name="media_standby">Standby</string>
+    <string name="media_volume">Volume %1$d%%</string>
+    <string name="media_volume_unknown">Volume unknown</string>
+    <string name="media_muted">muted</string>
+
+    <string name="quieter">Quieter</string>
+    <string name="louder">Louder</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+
+    <string name="error_unreachable">Home Assistant cannot be reached. Check the address and the network.</string>
+    <string name="error_unauthorized">The access token is invalid or has no permission.</string>
+    <string name="error_not_home_assistant">No Home Assistant API answers at this address.</string>
+    <string name="error_http">Home Assistant answered with error %1$d.</string>
+    <string name="error_invalid_address">That is not a valid http:// or https:// address.</string>
+    <string name="error_invalid_server_address">That is not a valid server address.</string>
+    <string name="error_missing_token">Enter an access token.</string>
+    <string name="error_unexpected">Something went wrong. Try again.</string>
+</resources>
